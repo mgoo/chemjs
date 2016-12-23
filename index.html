@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/chemjs.js"></script>
+    <script type="text/javascript" src="js/Fruchterman_Reingold_Algorithem.js"></script>
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/hex_grid.js"></script>
+</head>
+<body>
+<div id="content">
+
+</div>
+
+
+<canvas id="canv" style="border: black solid medium;" width="1889" height="944">
+
+</canvas>
+<script>
+
+    var c=document.getElementById("canv");
+    var ctx=c.getContext("2d");
+    smile_to_SVG('C1C(C(C(CC1(C(=O)O)O)OC(=O)C=CC2=CC(=C(C=C2)O)O)O)O'); //makes the atoms and links list
+//    smile_to_SVG('C1C(C(C(CC1(C(O)O)O)OC(O)CCC2CC(C(CC2)O)O)O)O');
+//    smile_to_SVG('COC(O)C(C)CC1C(C)(C)1C(O)OC2C(C)C(C(O)C2)CCCCC');
+//    smile_to_SVG('C1=CC=CC=C1')
+    //smile_to_SVG('CCC(=O)O')
+
+
+    var grid = new hex_grid(c, ctx, 40);
+
+    var timerTask = setInterval(function(){ //updates and draws every 100/move_speed milliseconds
+        ctx.clearRect(0, 0, c.width, c.height);
+        update(atoms, links);
+        draw_all(atoms, links, ctx);
+        if (is_finished()){ //when finished get rid of spacers and stop
+            console.log('finsihed');
+            strip_spacers();
+            ctx.clearRect(0, 0, c.width, c.height)
+            grid.draw();
+            draw_all(atoms, links, ctx);
+            window.clearInterval(timerTask);
+        }
+    }, 100/move_speed);
+</script>
+
+</body>
+</html>
